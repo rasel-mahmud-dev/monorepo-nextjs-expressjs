@@ -1,7 +1,5 @@
 import request from 'supertest';
 import app from '../app/app';
-import fs from 'fs';
-import {text} from "express";
 
 test('GET / should return "Hi there!"', async () => {
     const response = await request(app).get('/');
