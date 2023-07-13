@@ -15,7 +15,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "dev": "ts-node-dev app/app.ts"
+    "dev": "ts-node-dev  app/server.ts"
   },
   "dependencies": {
     "express": "^4.18.2"

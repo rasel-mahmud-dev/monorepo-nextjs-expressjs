@@ -1,2 +1,4 @@
 node_modules/
 packages/client/.next
+
+packages/server/uploads

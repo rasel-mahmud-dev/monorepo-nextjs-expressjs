@@ -1,5 +1,7 @@
 import request from 'supertest';
 import app from '../app/app';
+import fs from 'fs';
+import {text} from "express";
 
 test('GET / should return "Hi there!"', async () => {
     const response = await request(app).get('/');
@@ -66,3 +68,33 @@ describe('Authentication', function () {
 
 
 });
+
+
+
+describe('File upload', function () {
+
+    test("upload a single file", async ()=>{
+        jest.mock('fs');
+
+        const response = await request(app).post("/upload").attach("image", Buffer.from("text cotnent sdkfjs kldjflks djflsd j", "utf-8"), {
+            filename: "test.file.txt"
+        })
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({ message: 'File upload success' });
+    })
+
+
+    test("upload a  big single file", async ()=>{
+        jest.mock('fs');
+
+        const response = await request(app).post("/upload").attach("image", Buffer.alloc(10 * 1024 * 1024, "asdfasd asdfsd", "utf-8"), {
+            filename: "test.file.txt"
+        })
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({ message: 'File upload success' });
+    })
+
+
+})

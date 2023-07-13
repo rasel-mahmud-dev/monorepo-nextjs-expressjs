@@ -1,6 +1,8 @@
 import express, {Request, Response} from "express"
 import cors from "cors"
 import jsonwebtoken, {JwtPayload} from "jsonwebtoken"
+import multer from "multer"
+
 
 const app = express()
 
@@ -66,6 +68,19 @@ app.get("/data", (req: Request, res: Response) => {
     res.write('data: Connected to SSE\n\n');
     res.write(`event: asdasdasd`);
     res.end()
+})
+
+
+const upload = multer({dest: 'uploads/'})
+
+app.post("/upload", (req: Request, res: Response) => {
+
+    upload.single("image")(req, res, function (err) {
+        if(err) return res.status(500).json({message: "File upload fail"})
+
+        if (!req.file) return res.status(500).json({message: "File upload fail"})
+        res.status(200).json({message: "File upload success"})
+    })
 })
 
 
