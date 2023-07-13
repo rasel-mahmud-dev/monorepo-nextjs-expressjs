@@ -22,6 +22,7 @@ describe('Authentication', function () {
             email: "test@gmail.com",
             password: "123"
         });
+        expect(response.body.token).toBeTruthy();
     });
 
     test("Get /auth-validate should return 403 because missing header token ", async () => {
@@ -47,6 +48,21 @@ describe('Authentication', function () {
             message: "User successfully logged"
         });
     });
+
+
+
+    test("Get /auth-validate should return 403 because expired token", async () => {
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWF0IjoxNjg5MjM0ODQ2LCJleHAiOjE2ODkyMzQ4NTZ9.1k8KEjnZwMNjbPQf4RPe8j8m9ygTqwgyl1XiB0-unY8"
+        const response = await request(app)
+            .get('/auth-validate')
+            .set('token', token)
+
+        expect(response.status).toBe(403);
+        expect(response.body).toEqual({
+            message: "Please login again"
+        });
+    });
+
 
 
 });

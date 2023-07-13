@@ -12,14 +12,10 @@ app.get("/", (req: Request, res: Response) => {
 })
 
 
-
 app.post("/login", (req: Request, res: Response) => {
     const {email, password} = req.body
-
     if (email && password) {
-
-        let token = jsonwebtoken.sign({email}, "SUPER_SECRET", {expiresIn: "40d"})
-
+        let token = jsonwebtoken.sign({email}, "SUPER_SECRET", {expiresIn: "10s"})
         res.status(200).send({
             email,
             password,
@@ -31,26 +27,29 @@ app.post("/login", (req: Request, res: Response) => {
 })
 
 
-
 app.get("/auth-validate", (req: Request, res: Response) => {
-    const token = req.headers["token"] as string || ""
+    try {
+        const token = req.headers["token"] as string || ""
 
-    if (!token) return res.status(403).json({message: "Please provide authentication token"})
+        if (!token) return res.status(403).json({message: "Please provide authentication token"})
 
-    type JWTP = (Partial<JwtPayload> & { email: string }) | null
-    let data: JWTP  = jsonwebtoken.verify(token, "SUPER_SECRET") as JWTP
-    if (!data) {
-        return res.status(500).json({message: "Login fail"})
+        type JWTP = (Partial<JwtPayload> & { email: string }) | null
+        let data: JWTP = jsonwebtoken.verify(token, "SUPER_SECRET") as JWTP
+
+        if (!data) {
+            return res.status(403).json({message: "Please login again"})
+        }
+
+        res.status(200).send({
+            user: {
+                email: data.email
+            },
+            message: "User successfully logged"
+        })
+    } catch (ex) {
+        return res.status(403).json({message: "Please login again"})
     }
-
-    res.status(200).send({
-        user: {
-            email: data.email
-        },
-        message: "User successfully logged"
-    })
 })
-
 
 
 app.get("/data", (req: Request, res: Response) => {
