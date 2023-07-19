@@ -13,7 +13,7 @@ export const fetchUsersAction = createAsyncThunk<Array<User>, undefined>(
             const data = await response.json();
             return data;
         } catch (ex) {
-            return thunkAPI.rejectWithValue("User fetch fail");
+            return []
         }
     }
 );
