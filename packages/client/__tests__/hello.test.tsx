@@ -10,6 +10,4 @@ it("test Hello page", async ()=>{
     await screen.getByRole("heading")
 
     expect(screen.getByRole('heading')).toHaveTextContent('Welcome RaseL')
-
-
 })
