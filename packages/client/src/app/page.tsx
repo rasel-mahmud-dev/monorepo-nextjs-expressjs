@@ -34,7 +34,7 @@ const fetchData = async (url: string, cb: (data: string)=>void) => {
 
 export default function Home() {
 
-    const el = createRef<HTMLDivElement>(null)
+    const el = createRef<HTMLDivElement>()
 
 
     useEffect(()=>{
